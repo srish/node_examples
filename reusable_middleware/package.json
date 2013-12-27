@@ -1,0 +1,8 @@
+{
+	"name": "reusable-middleware",
+	"version": "0.0.1",
+	
+	"dependencies": {
+		"connect": "1.8.7"
+	}
+}
