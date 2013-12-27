@@ -1,0 +1,9 @@
+{
+	"name": "handling-uploads",
+	"version": "0.0.1",
+
+	"dependencies": {	
+		"connect": "1.8.7",
+		"formidable": "1.0.8"
+	}
+}
