@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Websocket cursors</title>
+
+		<script type="text/javascript">
+
+			window.onload = function() {
+				var lastMessage;
+
+				//create socket 
+				var ws = new WebSocket('ws://localhost:3000/');
+
+				ws.onopen = function() {					
+					window.onmousemove = mousemoved; 
+
+					function mousemoved(ev) {
+						ws.send(JSON.stringify({ x: ev.clientX, y: ev.clientY }));
+					}
+				}
+
+				var initialized; 
+
+				ws.onmessage = function (ev) {
+					var obj = JSON.parse(ev.data);
+
+					//the first message is the position of all existing cursors
+					if(!initialized) {
+						initialized = true;
+
+						for(var id in obj) {
+							move(id, obj);
+						}
+					} else {
+						// other messages can either be a position change or 
+						// a disconnection
+
+						if('disconnect' == obj.type) {
+							remove(obj.id);
+						} else {
+							move(id, obj); 
+						}	 
+					}
+
+					function move(id, pos) {
+						var cursor = document.getElementById('cursor-' + id);
+
+						if(!cursor) {
+							cursor = document.createElement('img');
+							cursor.id = 'cursor-' + id;
+							cursor.src = '/cursor.png';
+							cursor.style.position = 'absolute';
+							cursor.style.width = '100px';
+							cursor.style.height = '100px';
+							document.body.appendChild(cursor);
+						
+						}
+
+						if(id == 'x') {
+							var x = pos.x; 
+						} else {
+							var y = pos.y;
+						}
+
+						cursor.style.left = pos.x + 'px';
+						cursor.style.top = pos.y + 'px';
+					}
+
+					function remove (id) {
+						var cursor = document.getElementById('cursor-' + id);
+						cursor.parentNode.removeChild(cursor);
+					}
+				}
+
+			}
+
+		</script> 
+	</head>
+
+	<body>
+		<h1>Websocket cursors</h1>
+	</body>
+
+</html>
