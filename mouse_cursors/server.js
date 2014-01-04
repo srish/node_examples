@@ -16,7 +16,6 @@ var positions = {},
 /*Listening on connections */
 ws.on('connection', function(socket) {
 	// you give the socket an id
-	console.log("b ksdbfkdsbf kdsjbfjksdb ");
 	socket.id = ++total; 
 
 	//you send the positions of everyone else
